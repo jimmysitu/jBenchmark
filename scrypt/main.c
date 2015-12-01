@@ -1,9 +1,12 @@
 #include "scrypt.h"
 
+static char magic[0x1000] __attribute__ ((aligned(16)));
+
 int main(){
     uint32_t data[20];
     uint32_t ohash[8];
     uint32_t ghash[8];
+
     
     int i;
 
@@ -37,11 +40,15 @@ int main(){
 	ghash[6] = 0x3FECABB9;
 	ghash[7] = 0x637F983E;
 
-
-    scrypt_regenhash(data, ohash);
+    magic[0x0110] = 0xAA;
+    magic[0x0220] = 0x55;
+    for (i = 0; i < 1024; i++){
+        scrypt_regenhash(data, ohash);
+    }
+    magic[0x0330] = 0x00;
+    magic[0x0440] = 0xFF;
 
     for (i = 0; i < 8; i++){
         printf("ghash: 0x%08X, ohash: 0x%08X\n", ghash[i], ohash[i]);
     }
-    
 }
