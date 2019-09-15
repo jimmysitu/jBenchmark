@@ -102,7 +102,7 @@ local predefined_plots = {
         xtitle = "Time"
     },
     RAPL_PKG_PP0 = {
-        perfgroup = "TDP_SHARE",
+        perfgroup = "ENERGY",
         ymetricmatch = "Power [W]",
         ytitle = "Power [W]",
         y2metricmatch = "Power PP0 [W]",
@@ -111,7 +111,7 @@ local predefined_plots = {
         xtitle = "Time"
     },
     RAPL_PP0_PP1 = {
-        perfgroup = "TDP_SHARE",
+        perfgroup = "ENERGY",
         ymetricmatch = "Power PP0 [W]",
         ytitle = "Power PP0 [W]",
         y2metricmatch = "Power PP1 [W]",
@@ -120,12 +120,21 @@ local predefined_plots = {
         xtitle = "Time"
     },
     RAPL_PKG_TEMP = {
-        perfgroup = "TDP_SHARE",
+        perfgroup = "ENERGY",
         ymetricmatch = "Power [W]",
         ytitle = "Power [W]",
         y2metricmatch = "Temperature [C]",
         y2title = "Temperature [C]",
         title = "PKG Power and Temperature ",
+        xtitle = "Time"
+    },
+    RAPL_PKG_CLK = {
+        perfgroup = "ENERGY",
+        ymetricmatch = "Power [W]",
+        ytitle = "Power [W]",
+        y2metricmatch = "Clock [MHz]",
+        y2title = "Clock [MHz]",
+        title = "Power and Clock Frequency",
         xtitle = "Time"
     },
     TEMP = {
@@ -173,6 +182,7 @@ local function usage()
     print_stdout("-d, --dump\t\t Print output as it is send to feedGnuplot.")
     print_stdout("-p, --plotdump\t\t Use dump functionality of feedGnuplot. Plots out plot configurations plus data to directly submit to gnuplot")
     print_stdout("--host <host>\t\t Run likwid-perfctr on the selected host using SSH. Evaluation and plotting is done locally.")
+    print_stdout("--user <user>\t\t Username for host SSH login.")
     print_stdout("\t\t\t This can be used for machines that have no gnuplot installed. All paths must be similar to the local machine.")
     print_stdout("\n")
     examples()
@@ -203,6 +213,7 @@ local nrgroups, allgroups = likwid.get_groups()
 local mfreq = 1.0
 local plotrange = 0
 local host = nil
+local user = nil
 local force = false
 
 if #arg == 0 then
@@ -210,7 +221,7 @@ if #arg == 0 then
     os.exit(0)
 end
 
-for opt,arg in likwid.getopt(arg, {"h","v","g:","C:","c:","t:","r:","a","d","p","f","help", "version","group:","time:","dump","range:","plotdump","all", "host:", "force"}) do
+for opt,arg in likwid.getopt(arg, {"h","v","g:","C:","c:","t:","r:","a","d","p","f","help", "version","group:","time:","dump","range:","plotdump","all", "host:", "user:", "force"}) do
     if opt == "h" or opt == "help" then
         usage()
         os.exit(0)
@@ -237,6 +248,8 @@ for opt,arg in likwid.getopt(arg, {"h","v","g:","C:","c:","t:","r:","a","d","p",
         print_configs = true
     elseif opt == "host" then
         host = arg
+    elseif opt == "user" then
+        user = arg
     elseif opt == "f" or opt == "force" then
         force = true
     elseif opt == "?" then
@@ -440,7 +453,14 @@ for i, event_def in pairs(eventStrings) do
 end
 
 cmd = ""
-if host ~= nil then
+if user ~= nil then
+    if host ~= nil then
+        cmd = cmd .. "ssh -t "..user.."@"..host.. " \"/bin/bash -c \\\" "
+        cmd = cmd .. "sudo "
+    else
+        print_stderr("user & host must not nil")
+    end
+elseif host ~= nil then
     cmd = cmd .. "ssh "..host.. " \"/bin/bash -c \\\" "
 end
 cmd = cmd .. " " ..PERFCTR
@@ -463,8 +483,8 @@ cmd = cmd .. " ".. table.concat(execList, " ")
 cmd = cmd .. " 3>&1 1>&2 2>&3 3>&-"
 if host ~= nil then
     cmd = cmd .. " \\\" \" "
+    print_stdout("Run command on host\n"..cmd)
 end
-
 
 
 for i, group in pairs(group_list) do
