@@ -1,6 +1,18 @@
 # jmBenchmark
 Jimmy's Benchmark
 
+Some useful tools which is not in this repo
+
+- x86_energy_perf_policy
+
+  - Help to enable and setting hwp and turbo
+
+- CoreFreq
+
+  - Help check hardware function support or not, enable or not
+
+    
+
 ## likwid
 
 - likwid-perfscope
