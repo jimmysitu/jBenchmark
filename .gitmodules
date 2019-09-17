@@ -1,3 +1,6 @@
 [submodule "powertop"]
 	path = powertop
 	url = https://github.com/fenrus75/powertop.git
+[submodule "CoreFreq"]
+	path = CoreFreq
+	url = https://github.com/cyring/CoreFreq.git
