@@ -41,118 +41,13 @@ PERFCTR="/usr/bin/likwid-perfctr"
 FEEDGNUPLOT="/usr/bin/feedGnuplot"
 
 local predefined_plots = {
-    FLOPS_DP = {
-        perfgroup = "FLOPS_DP",
-        ymetricmatch = "MFlops/s",
-        title = "Double Precision Flop Rate",
-        ytitle = "MFlops/s",
-        y2title = nil,
-        xtitle = "Time"
-    },
-    FLOPS_SP = {
-        perfgroup = "FLOPS_SP",
-        ymetricmatch = "MFlops/s",
-        title = "Single Precision Flop Rate",
-        ytitle = "MFlops/s",
-        y2title = nil,
-        xtitle = "Time"
-    },
-    L2 = {
-        perfgroup = "L2",
-        ymetricmatch = "L2D load bandwidth [MBytes/s]",
-        title = "L2 cache bandwidth",
-        ytitle = "Load Bandwidth [MBytes/s]",
-        y2metricmatch = "L2D evict bandwidth [MBytes/s]",
-        y2title = "Evict Bandwidth [MBytes/s]",
-        xtitle = "Time"
-    },
-    L3 = {
-        perfgroup = "L3",
-        ymetricmatch = "L3 load bandwidth [MBytes/s]",
-        title = "L3 cache bandwidth",
-        ytitle = "Load Bandwidth [MBytes/s]",
-        y2title = "Evict Bandwidth [MBytes/s]",
-        y2metricmatch = "L3 evict bandwidth [MBytes/s]",
-        xtitle = "Time"
-    },
-    MEM = {
-        perfgroup = "MEM",
-        ymetricmatch = "Memory bandwidth [MBytes/s]",
-        title = "Memory bandwidth",
-        ytitle = "Bandwidth [MBytes/s]",
-        y2title = nil,
-        xtitle = "Time"
-    },
-    QPI = {
-        perfgroup = "QPI",
-        ymetricmatch = "QPI data bandwidth [MByte/s]",
-        title = "QPI bandwidth",
-        ytitle = "Bandwidth [MBytes/s]",
-        y2title = nil,
-        xtitle = "Time",
-        y2metricmatch = "QPI link bandwidth [MByte/s]"
-    },
-    ENERGY = {
-        perfgroup = "ENERGY",
-        ymetricmatch = "Power [W]",
-        title = "Consumed energy",
-        ytitle = "Power [W]",
-        y2title = "Power DRAM [W]",
-        y2metricmatch = "Power DRAM [W]",
-        xtitle = "Time"
-    },
-    RAPL_PKG_PP0 = {
-        perfgroup = "ENERGY",
-        ymetricmatch = "Power [W]",
-        ytitle = "Power [W]",
-        y2metricmatch = "Power PP0 [W]",
-        y2title = "Power PP0 [W]",
-        title = "PKG and PP0 Power",
-        xtitle = "Time"
-    },
     RAPL_PP0_PP1 = {
         perfgroup = "ENERGY",
         ymetricmatch = "Power PP0 [W]",
         ytitle = "Power PP0 [W]",
-        y2metricmatch = "Power PP1 [W]",
-        y2title = "Power PP1 [W]",
+        xmetricmatch = "Power PP1 [W]",
+        xtitle = "Power PP1 [W]",
         title = "PP0 and PP1 Power",
-        xtitle = "Time"
-    },
-    RAPL_PKG_TEMP = {
-        perfgroup = "ENERGY",
-        ymetricmatch = "Power [W]",
-        ytitle = "Power [W]",
-        y2metricmatch = "Temperature [C]",
-        y2title = "Temperature [C]",
-        title = "PKG Power and Temperature ",
-        xtitle = "Time"
-    },
-    RAPL_PKG_CLK = {
-        perfgroup = "ENERGY",
-        ymetricmatch = "Power [W]",
-        ytitle = "Power [W]",
-        y2metricmatch = "Clock [MHz]",
-        y2title = "Clock [MHz]",
-        title = "Power and Clock Frequency",
-        xtitle = "Time"
-    },
-    TEMP = {
-        perfgroup = "ENERGY",
-        ymetricmatch = "Temperature [C]",
-        title = "Temperature",
-        ytitle = "Temperature [C]",
-        y2title = nil,
-        xtitle = "Time"
-    },
-    NUMA = {
-        perfgroup = "NUMA",
-        ymetricmatch = "Local DRAM bandwidth [MByte/s]",
-        title = "NUMA separated memory bandwidth",
-        ytitle = "Bandwidth [MBytes/s]",
-        y2metricmatch = "Remote DRAM bandwidth [MByte/s]",
-        y2title = nil,
-        xtitle = "Time"
     },
 }
 
@@ -272,18 +167,11 @@ if print_configs then
             if g == config["perfgroup"] then
                 print_stdout("Group "..name)
                 print_stdout("\tPerfctr group: "..config["perfgroup"])
-                print_stdout("\tMatch for metric: "..config["ymetricmatch"])
+                print_stdout("\tMatch for xmetric: "..config["xmetricmatch"])
+                print_stdout("\tMatch for ymetric: "..config["ymetricmatch"])
                 print_stdout("\tTitle of plot: "..config["title"])
                 print_stdout("\tTitle of x-axis: "..config["xtitle"])
                 print_stdout("\tTitle of y-axis: "..config["ytitle"])
-                if config["y2metricmatch"] then
-                    print_stdout("\tMatch for second metric: "..config["y2metricmatch"])
-                end
-                if config["y2title"] then
-                    print_stdout("\tTitle of y2-axis: "..config["y2title"])
-                elseif config["y2metricmatch"] then
-                    print_stdout("\tTitle of y2-axis: "..config["ytitle"])
-                end
                 print_stdout("")
                 break
             end
@@ -353,73 +241,28 @@ for i, event_def in pairs(eventStrings) do
     formulalist = nil
     local title = nil
     local ytitle = nil
-    local y2title = nil
-    local y2funcindex = nil
     local xtitle = nil
     local output = nil
     if plotgroup ~= nil then
         title = plotgroupconfig["title"]
-        ytitle = plotgroupconfig["ytitle"]
         xtitle = plotgroupconfig["xtitle"]
-        if plotgroupconfig["y2title"] ~= nil then
-            y2title = plotgroupconfig["y2title"]
-        elseif plotgroupconfig["y2metricmatch"] ~= nil then
-            y2title = plotgroupconfig["ytitle"]
+        ytitle = plotgroupconfig["ytitle"]
+        for i,mconfig in pairs(groupdata["Metrics"]) do
+            local mmatch = "%a*"..plotgroupconfig["xmetricmatch"]:gsub("%[","%%["):gsub("%]","%%]").."%a*"
+            if plotgroupconfig["xmetricmatch"] ~= nil then
+                if mconfig["description"]:match(mmatch) then
+                    formulalist = {{name=mconfig["description"], index=i}}
+                end
+            end
         end
         for i,mconfig in pairs(groupdata["Metrics"]) do
             local mmatch = "%a*"..plotgroupconfig["ymetricmatch"]:gsub("%[","%%["):gsub("%]","%%]").."%a*"
             if mconfig["description"]:match(mmatch) then
-                formulalist = {{name=mconfig["description"], index=i}}
-            end
-        end
-        for i,mconfig in pairs(groupdata["Metrics"]) do
-            if plotgroupconfig["y2metricmatch"] ~= nil then
-                local mmatch = "%a*"..plotgroupconfig["y2metricmatch"]:gsub("%[","%%["):gsub("%]","%%]").."%a*"
-                if mconfig["description"]:match(mmatch) then
-                    table.insert(formulalist, {name=mconfig["description"], index=i})
-                end
+                table.insert(formulalist, {name=mconfig["description"], index=i})
             end
         end
     end
 
-    --[[for j,estr in pairs(likwid.stringsplit(outopts, ":")) do
-        if estr:match("^title=([%g%s]+)") then
-            title = estr:match("^title=([%g%s]+)")
-        elseif estr:match("^TITLE=([%g%s]+)") then
-            title = estr:match("^TITLE=([%g%s]+)")
-        elseif estr:match("ytitle=([%g%s]+)") then
-            ytitle = estr:match("ytitle=([%g%s]+)")
-        elseif estr:match("YTITLE=([%g%s]+)")then
-            ytitle = estr:match("YTITLE=([%g%s]+)")
-        elseif estr:match("y2title=(%d+)-([%g%s]+)") then
-            y2funcindex, y2title = estr:match("y2title=(%d+)-([%g%s]+)")
-        elseif estr:match("Y2TITLE=(%d+)-([%g%s]+)") then
-            y2funcindex, y2title = estr:match("Y2TITLE=(%d+)-([%g%s]+)")
-        elseif estr:match("y2title=([%g%s]+)") then
-            y2title = estr:match("y2title=([%g%s]+)")
-        elseif estr:match("Y2TITLE=([%g%s]+)") then
-            y2title = estr:match("Y2TITLE=([%g%s]+)")
-        elseif estr:match("xtitle=([%g%s]+)") then
-            xtitle = estr:match("xtitle=([%g%s]+)")
-        elseif estr:match("XTITLE=([%g%s]+)")then
-            xtitle = estr:match("XTITLE=([%g%s]+)")
-        elseif estr:match("[%g%s]+=[%g]+") then
-            fname, form = estr:match("([%g%s]+)=([%g]+)")
-            if formulalist == nil then
-                formulalist = {}
-            end
-            if groupdata["Metrics"] ~= nil then
-                for i,mconfig in pairs(groupdata["Metrics"]) do
-                    if mconfig["description"]:match(fname) then
-                        table.insert(formulalist, {name=fname, index=i})
-                        break
-                    end
-                end
-            else
-                table.insert(formulalist, {name=fname, formula=form})
-            end
-        end
-    end]]
 
     group_list[i]["eventstring"] = event_string
     group_list[i]["counterlist"] = {}
@@ -431,16 +274,6 @@ for i, event_def in pairs(eventStrings) do
     end
     if ytitle then
         group_list[i]["ytitle"] = ytitle
-    end
-    if y2title then
-        group_list[i]["y2title"] = y2title
-    end
-    if y2funcindex then
-        group_list[i]["y2funcindex"] = y2funcindex - 1
-    else
-        if formulalist ~= nil then
-            group_list[i]["y2funcindex"] = #formulalist - 1
-        end
     end
     if xtitle then
         group_list[i]["xtitle"] = xtitle
@@ -489,7 +322,7 @@ end
 
 for i, group in pairs(group_list) do
     gnucmd = string.format("%s --stream %f --with linespoints --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
-    extracmds = {'set xtics font \",10\"', 'set ytics font \",10\"', 'set y2tics font \",10\"',
+    extracmds = {'set xtics font \",10\"', 'set ytics font \",10\"',
                  'set bmargin 10', 'set key font \",12\"' }
     gnucmd =  gnucmd .. " --geometry \"1280,1024\""
     if plotrange > 0 then
@@ -516,10 +349,6 @@ for i, group in pairs(group_list) do
     if group["ytitle"] ~= nil then
         --gnucmd = gnucmd .. string.format(" --ylabel %q", group["ytitle"])
         table.insert(extracmds, string.format("set ylabel %q font \",12\"", group["ytitle"]))
-    end
-    if group["y2title"] ~= nil then
-        gnucmd = gnucmd .. string.format(" --y2 %d", group["y2funcindex"])
-        table.insert(extracmds, string.format("set y2label %q font \",12\"", group["y2title"]))
     end
     if group["formulas"] then
         if #cpulist == 1 then
