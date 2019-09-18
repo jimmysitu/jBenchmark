@@ -316,15 +316,16 @@ cmd = cmd .. " ".. table.concat(execList, " ")
 cmd = cmd .. " 3>&1 1>&2 2>&3 3>&-"
 if host ~= nil then
     cmd = cmd .. " \\\" \" "
-    print_stdout("Run command on host\n"..cmd)
 end
+print_stdout("Run command on host or localhost\n"..cmd)
 
 
 for i, group in pairs(group_list) do
-    gnucmd = string.format("%s --stream %f --with linespoints --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
+    --gnucmd = string.format("%s --stream %f --with linespoints --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
+    gnucmd = string.format("%s --stream %f --with points --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
     extracmds = {'set xtics font \",10\"', 'set ytics font \",10\"',
                  'set bmargin 10', 'set key font \",12\"' }
-    gnucmd =  gnucmd .. " --geometry \"1280,1024\""
+    gnucmd =  gnucmd .. " --geometry \"1280,1280\""
     if plotrange > 0 then
         gnucmd = gnucmd .. string.format(" --xlen %d", plotrange)
     else
@@ -352,14 +353,16 @@ for i, group in pairs(group_list) do
     end
     if group["formulas"] then
         if #cpulist == 1 then
-            for f, fdesc in pairs(group["formulas"]) do
-                gnucmd = gnucmd .. string.format(" --legend %d %q", f-1, fdesc["name"])
+            local up = #group["formulas"]
+            for i=1,up,2 do
+                gnucmd = gnucmd .. string.format(" --legend %d %q", i/2, group["formulas"][i]["name"].." vs "..group["formulas"][i+1]["name"])
             end
         else
             local curveID = 0
             for c,cpu in pairs(cpulist) do
-                for f, fdesc in pairs(group["formulas"]) do
-                    gnucmd = gnucmd .. string.format(" --legend %d %q", curveID, "C"..cpu..": "..fdesc["name"])
+                local up = #group["formulas"]
+                for i=1,up,2 do
+                    gnucmd = gnucmd .. string.format(" --legend %d %q",curveID, "C"..cpu..": "..group["formulas"][i]["name"].." vs "..group["formulas"][i+1]["name"])
                     curveID = curveID + 1
                 end
             end
@@ -379,7 +382,7 @@ end
 likwid.catchSignal()
 local mtime = {}
 for i,g in pairs(group_list) do
-    local str = "0 "
+    local str = ""
     for k,t in pairs(cpulist) do
         for j,c in pairs(g["formulas"]) do
             str = str .."0 "
@@ -425,7 +428,8 @@ while true do
             end
         end
 
-        str = tostring(time)
+        str = ""
+        --str = tostring(time)
         for f, flist in pairs(group_list[group]["formulas"]) do
             if flist["index"] ~= nil then
                 for i=1,nr_threads do
