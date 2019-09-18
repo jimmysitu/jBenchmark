@@ -9,4 +9,4 @@
 	url = https://github.com/mhirki/rapl-tools.git
 [submodule "micro-benchmark/OpenDwarfs"]
 	path = micro-benchmark/OpenDwarfs
-	url = https://github.com/vtsynergy/OpenDwarfs.git
+	url = https://github.com/jimmysitu/OpenDwarfs.git
