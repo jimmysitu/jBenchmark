@@ -4,3 +4,6 @@
 [submodule "CoreFreq"]
 	path = CoreFreq
 	url = https://github.com/cyring/CoreFreq.git
+[submodule "rapl-tools"]
+	path = rapl-tools
+	url = https://github.com/mhirki/rapl-tools.git
