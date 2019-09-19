@@ -490,7 +490,7 @@ end
 for i, group in pairs(group_list) do
     gnucmd = string.format("%s --stream %f --with linespoints --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
     extracmds = {'set xtics font \",10\"', 'set ytics font \",10\"', 'set y2tics font \",10\"',
-                 'set bmargin 10', 'set key font \",12\"' }
+                 'set bmargin 5', 'set key font \",12\"' }
     gnucmd =  gnucmd .. " --geometry \"1280,1024\""
     if plotrange > 0 then
         gnucmd = gnucmd .. string.format(" --xlen %d", plotrange)

@@ -74,6 +74,7 @@ local function usage()
     print_stdout("-g, --group <string>\t Preconfigured plot group or custom event set string with plot config. See man page for information.")
     print_stdout("-t, --time <time>\t Frequency in s, ms or us, e.g. 300ms, for the timeline mode of likwid-perfctr")
     print_stdout("-f, --force\t\t Overwrite counter configuration although already in use")
+    print_stdout("-l, --line\t\t Draw lines between points")
     print_stdout("-d, --dump\t\t Print output as it is send to feedGnuplot.")
     print_stdout("-p, --plotdump\t\t Use dump functionality of feedGnuplot. Plots out plot configurations plus data to directly submit to gnuplot")
     print_stdout("--host <host>\t\t Run likwid-perfctr on the selected host using SSH. Evaluation and plotting is done locally.")
@@ -110,13 +111,14 @@ local plotrange = 0
 local host = nil
 local user = nil
 local force = false
+local line = false
 
 if #arg == 0 then
     usage()
     os.exit(0)
 end
 
-for opt,arg in likwid.getopt(arg, {"h","v","g:","C:","c:","t:","r:","a","d","p","f","help", "version","group:","time:","dump","range:","plotdump","all", "host:", "user:", "force"}) do
+for opt,arg in likwid.getopt(arg, {"h","v","g:","C:","c:","t:","r:","a","d","p","f","l","help", "version","group:","time:","dump","range:","plotdump","all", "host:", "user:", "force", "line"}) do
     if opt == "h" or opt == "help" then
         usage()
         os.exit(0)
@@ -147,6 +149,8 @@ for opt,arg in likwid.getopt(arg, {"h","v","g:","C:","c:","t:","r:","a","d","p",
         user = arg
     elseif opt == "f" or opt == "force" then
         force = true
+    elseif opt == "l" or opt == "line" then
+        line = true
     elseif opt == "?" then
         print_stderr("Invalid commandline option -"..arg)
         os.exit(1)
@@ -321,10 +325,13 @@ print_stdout("Run command on host or localhost\n"..cmd)
 
 
 for i, group in pairs(group_list) do
-    --gnucmd = string.format("%s --stream %f --with linespoints --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
-    gnucmd = string.format("%s --stream %f --with points --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
+    if line then
+        gnucmd = string.format("%s --stream %f --with linespoints --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
+    else
+        gnucmd = string.format("%s --stream %f --with points --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
+    end
     extracmds = {'set xtics font \",10\"', 'set ytics font \",10\"',
-                 'set bmargin 10', 'set key font \",12\"' }
+                 'set bmargin 5', 'set key font \",12\"' }
     gnucmd =  gnucmd .. " --geometry \"1280,1280\""
     if plotrange > 0 then
         gnucmd = gnucmd .. string.format(" --xlen %d", plotrange)
