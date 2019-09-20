@@ -2,6 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR/../micro-benchmark/OpenDwarfs/build
+
 ## GPU full loading
 #for i in {1..2}
 #do 
@@ -22,8 +23,7 @@ cd $DIR/../micro-benchmark/OpenDwarfs/build
 #do
 #    for j in {1..4}
 #    do
-#	    likwid-bench -s 1s -t stream_avx -w S0:1MB:4 >/dev/null 2>&1 &
-#	    likwid-bench -s 1s -t stream_avx -w S0:1MB:4 >/dev/null 2>&1 &
+         ./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
 #    done
 #    # CPU loading fence
 #	likwid-bench -s 1s -t stream_avx -w S0:1MB:4 >/dev/null 2>&1
@@ -34,15 +34,15 @@ cd $DIR/../micro-benchmark/OpenDwarfs/build
 
 for i in {1..2}
 do
-	./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 &
-	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
+	./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 & \
+	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 && fg
     echo "CPU & GPU mix loading interation $i done"
 done
 
 for i in {1..2}
 do
-	./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 &
-	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
+	./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 & \
+	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 && fg
     echo "CPU & GPU mix loading interation $i done"
     sleep 20
 done
