@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cd ../micro-benchmark/OpenDwarfs/build
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd $DIR/../micro-benchmark/OpenDwarfs/build
 ## GPU full loading
 #for i in {1..2}
 #do 
@@ -36,7 +37,6 @@ do
 	./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 &
 	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
     echo "CPU & GPU mix loading interation $i done"
-    sleep 20
 done
 
 for i in {1..2}
@@ -44,4 +44,6 @@ do
 	./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 &
 	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
     echo "CPU & GPU mix loading interation $i done"
+    sleep 20
 done
+
