@@ -78,6 +78,7 @@ local function usage()
     print_stdout("-l, --line\t\t Draw lines between points")
     print_stdout("-d, --dump\t\t Print output as it is send to feedGnuplot.")
     print_stdout("-p, --plotdump\t\t Use dump functionality of feedGnuplot. Plots out plot configurations plus data to directly submit to gnuplot")
+    print_stdout("--count <count>\t\t Clear out the current data after every <count> data sample")
     print_stdout("--host <host>\t\t Run likwid-perfctr on the selected host using SSH. Evaluation and plotting is done locally.")
     print_stdout("--user <user>\t\t Username for host SSH login.")
     print_stdout("\t\t\t This can be used for machines that have no gnuplot installed. All paths must be similar to the local machine.")
@@ -109,6 +110,7 @@ local plotdump = false
 local nrgroups, allgroups = likwid.get_groups()
 local mfreq = 1.0
 local plotrange = 0
+local count = 0
 local host = nil
 local user = nil
 local force = false
@@ -119,7 +121,7 @@ if #arg == 0 then
     os.exit(0)
 end
 
-for opt,arg in likwid.getopt(arg, {"h","v","g:","C:","c:","t:","r:","a","d","p","f","l","help", "version","group:","time:","dump","range:","plotdump","all", "host:", "user:", "force", "line"}) do
+for opt,arg in likwid.getopt(arg, {"h","v","g:","C:","c:","t:","r:","a","d","p","f","l","help", "version","group:","time:","dump","range:","plotdump","all", "count:", "host:", "user:", "force", "line"}) do
     if opt == "h" or opt == "help" then
         usage()
         os.exit(0)
@@ -144,6 +146,8 @@ for opt,arg in likwid.getopt(arg, {"h","v","g:","C:","c:","t:","r:","a","d","p",
         plotrange = tonumber(arg)
     elseif opt == "a" or opt == "all" then
         print_configs = true
+    elseif opt == "count" then
+        count = tonumber(arg)
     elseif opt == "host" then
         host = arg
     elseif opt == "user" then
@@ -410,6 +414,7 @@ oldmetric = {}
 local perfctr_exited = false
 local oldtime = 0
 local clock = likwid.getCpuClock()
+local cnt = 0
 while true do
     local l = perfctr:read("*line")
     if l == nil then
@@ -443,11 +448,21 @@ while true do
                 for i=1,nr_threads do
                     str = str .." ".. data[flist["index"]][i]
                 end
+                cnt = cnt + 1
             end
         end
 
         group_list[group]["output"]:write(str.."\n")
+
+--        if count > 0 then
+--            if cnt > count then
+--                group_list[group]["output"]:write("clear\n")
+--                cnt = 0
+--            end
+--        end
+
         group_list[group]["output"]:flush()
+
         if dump then
             print_stdout(tostring(group).." ".. str)
         end

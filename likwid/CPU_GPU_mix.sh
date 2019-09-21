@@ -3,47 +3,56 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR/../micro-benchmark/OpenDwarfs/build
 
+# Full loading, long runtime
+# ./gemnoui -p x -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
+# Full loading, short runtime
+# ./gemnoui -p x -d 0 -- ../test/n-body-methods/gem/nucleosome 80 1 0 >/dev/null 2>&1
+# 50% loading, short runtime
+# ./needle -p x -d 0 -- 20480 100
+
+
 ## GPU full loading
 #for i in {1..2}
 #do 
 #    for j in {1..4}
 #    do
-#	    ./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/nucleosome 80 1 0 >/dev/null 2>&1 &
-#	    ./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/nucleosome 80 1 0 >/dev/null 2>&1 &
+#	    ./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
 #    done
-#    # GPU loading fence
-#	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/nucleosome 80 1 0 >/dev/null 2>&1
 #    # Earn thermal credit
 #    echo "GPU full loading interation $i done"
 #    sleep 30
 #done
 #
 ## CPU full loading
-#for i in {1..4}
+#for i in {1..2}
 #do
-#    for j in {1..4}
+#    for j in {1..2}
 #    do
-         ./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
+#       ./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
 #    done
-#    # CPU loading fence
-#	likwid-bench -s 1s -t stream_avx -w S0:1MB:4 >/dev/null 2>&1
-#    # Earn thermal credit
 #    echo "CPU full loading interation $i done"
+#    # Earn thermal credit
 #    sleep 30
 #done
 
-for i in {1..2}
+# GPU half & CPU half
+for i in {1..4}
 do
-	./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 & \
-	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 && fg
-    echo "CPU & GPU mix loading interation $i done"
+	./needle -p 1 -d 0 -- 20480 100 >/dev/null 2>&1 &
+	./needle -p 0 -d 0 -- 20480 100 >/dev/null 2>&1 &
+    wait
+    echo "CPU half & GPU half mix loading interation $i done"
 done
+sleep 20
 
-for i in {1..2}
-do
-	./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 & \
-	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 && fg
-    echo "CPU & GPU mix loading interation $i done"
-    sleep 20
-done
+## GPU full & CPU half
+#for i in {1..2}
+#do
+#	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 &
+#	./needle -p 0 -d 0 -- 20480 100 >/dev/null 2>&1 &
+#    wait
+#    echo "GPU full & CPU half mix loading interation $i done"
+#    # Earn thermal credit
+#    sleep 20
+#done
 
