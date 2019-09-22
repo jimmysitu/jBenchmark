@@ -73,7 +73,7 @@ do
 	./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1 &
 	./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/nucleosome 80 1 0 >/dev/null 2>&1 &
     wait
-    echo "GPU full & CPU half mix loading interation $i done"
+    echo "GPU full & CPU full mix loading interation $i done"
     # Earn thermal credit
     sleep 20
 done
