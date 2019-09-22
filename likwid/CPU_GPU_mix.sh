@@ -8,7 +8,7 @@ cd $DIR/../micro-benchmark/OpenDwarfs/build
 # Full loading, short runtime
 # ./gemnoui -p x -d 0 -- ../test/n-body-methods/gem/nucleosome 80 1 0 >/dev/null 2>&1
 # 50% loading, short runtime
-# ./needle -p x -d 0 -- 20480 100
+# ./needle -p x -d 0 -- 20480 100 >/dev/null 2>&1
 
 
 # GPU full loading
@@ -16,7 +16,7 @@ for i in {1..2}
 do 
     for j in {1..4}
     do
-	    ./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
+        ./gemnoui -p 1 -d 0 -- ../test/n-body-methods/gem/nucleosome 80 1 0 >/dev/null 2>&1
     done
     # Earn thermal credit
     echo "GPU full loading interation $i done"
@@ -28,7 +28,7 @@ for i in {1..2}
 do
     for j in {1..2}
     do
-       ./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/capsid 80 1 0 >/dev/null 2>&1
+        ./gemnoui -p 0 -d 0 -- ../test/n-body-methods/gem/nucleosome 80 1 0 >/dev/null 2>&1
     done
     echo "CPU full loading interation $i done"
     # Earn thermal credit
