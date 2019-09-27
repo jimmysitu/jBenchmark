@@ -42,8 +42,8 @@ do
 	./needle -p 0 -d 0 -- 20480 100 >/dev/null 2>&1 &
     wait
     echo "CPU half & GPU half mix loading interation $i done"
+    sleep 20
 done
-sleep 20
 
 # GPU full & CPU half
 for i in {1..2}
