@@ -10,3 +10,6 @@
 [submodule "micro-benchmark/OpenDwarfs"]
 	path = micro-benchmark/OpenDwarfs
 	url = https://github.com/jimmysitu/OpenDwarfs.git
+[submodule "coreboot"]
+	path = coreboot
+	url = https://github.com/coreboot/coreboot.git

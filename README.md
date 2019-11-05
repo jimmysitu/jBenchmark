@@ -49,18 +49,46 @@ sudo apt install libpapi-dev
 | 640H             | MSR_PP1_POWER_LIMIT   | PP1 RAPL Power Limit Control (R/W) |
 | 641H             | MSR_PP1_ENERGY_STATUS | PP1 Energy Status (R/O)            |
 | 642H             | MSR_PP1_POLICY        | PP1 Balance Policy (R/W)           |
+|                  |                       |                                    |
+|                  |                       |                                    |
 
 
 
+### Useful MCHBARs
+
+| Offset                  | Name    | Description                         |
+| ----------------------- | ------- | ----------------------------------- |
+|                         |         |                                     |
+|                         |         |                                     |
+| [B:0, D:0, F:0] + 5978h | Package | Package temperature in degrees (C)  |
+| [B:0, D:0, F:0] + 597Ch | PP0     | PP0 (IA) temperature in degrees (C) |
+| [B:0, D:0, F:0] + 5980h | PP1     | PP1 (GT) temperature in degrees (C) |
+|                         |         |                                     |
+
+- Reading MCHBARs command
+
+  ```bash
+  sudo inteltool -m | grep -P '5978|597c|5980'
+  ```
+
+  
 
 
-## likwid
 
-- likwid-perfscope
+## likwid-scripts
+
+- likwid-perfscope-ty, likwid-perfscope-xy
 
   ​	likwid-perfscope is a modify version of the one in likwid. The major update is add sudo execute on remote host. You need double type your sudo password of your remote host and the second type will not print any message since stdout is redirected.
 
+- likwid-perf need msr read & write
+
+  ```bash
+  sudo modprobe msr
+  ```
   
+
+
 
 
 
@@ -75,4 +103,4 @@ sudo apt install libpapi-dev
 
 * A memory hard hash function
 
-### 
+
