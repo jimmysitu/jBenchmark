@@ -128,6 +128,15 @@ local predefined_plots = {
         title = "PKG Power and Temperature ",
         xtitle = "Time"
     },
+    PP0_PP1_TEMP = {
+        perfgroup = "PP0_PP1_TEMP",
+        ymetricmatch = "PP0 Temperature [C]",
+        ytitle = "PP0 Temperature [C]",
+        y2metricmatch = "PP1 Temperature [C]",
+        y2title = "PP1 Temperature [C]",
+        title = "PP0/PP1 Temperature ",
+        xtitle = "Time"
+    },
     RAPL_PKG_CLK = {
         perfgroup = "ENERGY",
         ymetricmatch = "Power [W]",

@@ -1,0 +1,27 @@
+SHORT Power and Energy consumption
+
+EVENTSET
+FIXC0 INSTR_RETIRED_ANY
+FIXC1 CPU_CLK_UNHALTED_CORE
+FIXC2 CPU_CLK_UNHALTED_REF
+MBOX0C1  DRAM_READS
+MBOX0C2  DRAM_WRITES
+
+
+
+METRICS
+Runtime (RDTSC) [s] time
+Runtime unhalted [s] FIXC1*inverseClock
+Clock [MHz]  1.E-06*(FIXC1/FIXC2)/inverseClock
+CPI  FIXC1/FIXC0
+Read Bandwidth [MB/s] 1.E-06*64*MBOX0C1/time
+Write Bandwidth [MB/s] 1.E-06*64*MBOX0C2/time
+
+LONG
+Formula:
+Read Bandwidth = 1.E-06*64*DRAM_READS / time
+Write Bandwidth = 1.E-06*64*DRAM_WRITES / time
+-
+Skylake implements the MCHBAR PCI interface. This interface enables to
+monitor the read/write bandwidth.
+

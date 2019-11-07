@@ -1,0 +1,27 @@
+SHORT Power and Energy consumption
+
+EVENTSET
+FIXC0 INSTR_RETIRED_ANY
+FIXC1 CPU_CLK_UNHALTED_CORE
+FIXC2 CPU_CLK_UNHALTED_REF
+MBOX0TMP0 PP0_TEMP
+MBOX0TMP1 PP1_TEMP
+
+
+
+METRICS
+Runtime (RDTSC) [s] time
+Runtime unhalted [s] FIXC1*inverseClock
+Clock [MHz]  1.E-06*(FIXC1/FIXC2)/inverseClock
+CPI  FIXC1/FIXC0
+PP0 Temperature [C] MBOX0TMP0
+PP1 Temperature [C] MBOX0TMP1
+
+LONG
+Formula:
+PP0 Temperature = PP0_TEMP
+PP1 Temperature = PP1_TEMP
+-
+Skylake implements the MCHBAR PCI interface. This interface enables to
+monitor the read/write bandwidth.
+
