@@ -30,7 +30,7 @@
  * =======================================================================================
 ]]
 
-package.path = '/usr/share/lua/?.lua;' .. package.path
+package.path = '/usr/local/share/lua/?.lua;' .. package.path
 
 local likwid = require("likwid")
 

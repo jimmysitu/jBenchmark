@@ -30,7 +30,7 @@
  * =======================================================================================
 ]]
 
-package.path = '/usr/share/lua/?.lua;' .. package.path
+package.path = '/usr/local/share/lua/?.lua;' .. package.path
 
 local likwid = require("likwid")
 
@@ -291,7 +291,7 @@ if print_configs then
                 if config["y2title"] then
                     print_stdout("\tTitle of y2-axis: "..config["y2title"])
                 elseif config["y2metricmatch"] then
-                    print_stdout("\tTitle of y2-axis: "..config["ytitle"])
+                    print_stdout("\tTitle of y2-axis: "..config["y2metricmatch"])
                 end
                 print_stdout("")
                 break
