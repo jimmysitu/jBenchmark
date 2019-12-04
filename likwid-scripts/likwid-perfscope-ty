@@ -137,6 +137,24 @@ local predefined_plots = {
         title = "PP0/PP1 Temperature ",
         xtitle = "Time"
     },
+    PP0_PWR_VOLTAGE = {
+        perfgroup = "PP0_PWR_VOLTAGE",
+        ymetricmatch = "Power PP0 [W]",
+        ytitle = "Power PP0 [W]",
+        y2metricmatch = "Core Voltage [V]",
+        y2title = "Core Voltage [V]",
+        title = "PP0 Power and Voltage ",
+        xtitle = "Time"
+    },
+    PP0_CLK_VOLTAGE = {
+        perfgroup = "PP0_PWR_VOLTAGE",
+        ymetricmatch = "Clock [MHz]",
+        ytitle = "Clock [MHz]",
+        y2metricmatch = "Core Voltage [V]",
+        y2title = "Core Voltage [V]",
+        title = "PP0  Clock Frequency and Voltage ",
+        xtitle = "Time"
+    },
     RAPL_PKG_CLK = {
         perfgroup = "ENERGY",
         ymetricmatch = "Power [W]",

@@ -1,0 +1,25 @@
+SHORT Power and Voltage
+
+EVENTSET
+FIXC0 INSTR_RETIRED_ANY
+FIXC1 CPU_CLK_UNHALTED_CORE
+FIXC2 CPU_CLK_UNHALTED_REF
+VTG0  VOLTAGE_CORE
+PWR1  PWR_PP0_ENERGY
+
+
+
+METRICS
+Runtime (RDTSC) [s] time
+Runtime unhalted [s] FIXC1*inverseClock
+Clock [MHz]  1.E-06*(FIXC1/FIXC2)/inverseClock
+CPI  FIXC1/FIXC0
+Power PP0 [W] PWR1/time
+Core Voltage [V] VTG0/8192.0
+
+LONG
+Formula:
+Power PP0 = PWR_PP0_ENERGY / time
+Voltage Core = VOLTAGE_CORE / 8192.0
+-
+Skylake implements the voltage interface.
