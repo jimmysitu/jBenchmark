@@ -37,7 +37,7 @@ local likwid = require("likwid")
 print_stdout = print
 print_stderr = function(...) for k,v in pairs({...}) do io.stderr:write(v .. "\n") end end
 
-PERFCTR="/usr/bin/likwid-perfctr"
+PERFCTR="/usr/local/bin/likwid-perfctr"
 FEEDGNUPLOT="/usr/bin/feedGnuplot"
 
 local predefined_plots = {
@@ -48,6 +48,14 @@ local predefined_plots = {
         xmetricmatch = "Power PP1 [W]",
         xtitle = "Power PP1 [W]",
         title = "PP0 and PP1 Power",
+    },
+    PP0_CLK_VOLTAGE = {
+        perfgroup = "PP0_PWR_VOLTAGE",
+        ymetricmatch = "Clock [MHz]",
+        ytitle = "Clock [MHz]",
+        xmetricmatch = "Core Voltage [V]",
+        xtitle = "Core Voltage [V]",
+        title = "PP0  Clock Frequency and Voltage ",
     },
 }
 
