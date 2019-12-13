@@ -38,7 +38,7 @@ print_stdout = print
 print_stderr = function(...) for k,v in pairs({...}) do io.stderr:write(v .. "\n") end end
 
 PERFCTR="/usr/local/bin/likwid-perfctr"
-FEEDGNUPLOT="/usr/bin/feedGnuplot"
+FEEDGNUPLOT="/usr/local/bin/feedGnuplot"
 
 local predefined_plots = {
     FLOPS_DP = {
@@ -123,6 +123,15 @@ local predefined_plots = {
         perfgroup = "ENERGY",
         ymetricmatch = "Power [W]",
         ytitle = "Power [W]",
+        y2metricmatch = "Temperature [C]",
+        y2title = "Temperature [C]",
+        title = "PKG Power and Temperature ",
+        xtitle = "Time"
+    },
+    RAPL_CLK_TEMP = {
+        perfgroup = "ENERGY",
+        ymetricmatch = "Clock [MHz]",
+        ytitle = "Clock [MHz]",
         y2metricmatch = "Temperature [C]",
         y2title = "Temperature [C]",
         title = "PKG Power and Temperature ",
