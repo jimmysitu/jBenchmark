@@ -38,7 +38,7 @@ print_stdout = print
 print_stderr = function(...) for k,v in pairs({...}) do io.stderr:write(v .. "\n") end end
 
 PERFCTR="/usr/local/bin/likwid-perfctr"
-FEEDGNUPLOT="/usr/bin/feedGnuplot"
+FEEDGNUPLOT="/usr/local/bin/feedGnuplot"
 
 local predefined_plots = {
     PP0_PP1_TEMP = {
