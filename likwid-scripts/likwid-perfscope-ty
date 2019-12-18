@@ -134,7 +134,7 @@ local predefined_plots = {
         ytitle = "Clock [MHz]",
         y2metricmatch = "Temperature [C]",
         y2title = "Temperature [C]",
-        title = "PKG Power and Temperature ",
+        title = "Core Clock and Temperature ",
         xtitle = "Time"
     },
     PP0_PP1_TEMP = {
