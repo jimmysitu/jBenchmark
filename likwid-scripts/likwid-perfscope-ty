@@ -161,7 +161,7 @@ local predefined_plots = {
         ytitle = "Power PP0 [W]",
         y2metricmatch = "Clock [MHz]",
         y2title = "Clock [MHz]",
-        title = "PP0 Power and Voltage ",
+        title = "PP0 Power and Clock Frequency ",
         xtitle = "Time"
     },
     PP0_CLK_VOLTAGE = {
