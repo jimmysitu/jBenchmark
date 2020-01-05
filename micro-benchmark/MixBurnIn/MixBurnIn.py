@@ -8,7 +8,7 @@ import numpy as np
 
 import time
 
-MIN_ELAPSED = 0.2
+MIN_ELAPSED = 0.25
 KEY_LENGTH = 64
 BUF_MAX_SIZE= 1024 * 1024
 
@@ -68,8 +68,12 @@ if __name__ == "__main__":
         print("Adjusting runtime for platform: %s" % t.name)
         elapsed = timedelta()
         while(elapsed.total_seconds() < MIN_ELAPSED):
+            if(elapsed.total_seconds() < (MIN_ELAPSED/2)):
+                xsize = xsize << 1
+            else:
+                xsize = xsize + 8
+
             # Get some power credit
-            xsize = 2 * xsize
             time.sleep(10)
             startTime = datetime.utcnow()
 
@@ -82,33 +86,69 @@ if __name__ == "__main__":
 
         t.minXSize = xsize
         t.minYSize = ysize
+        print("Final min size: %d, %d" % (t.minXSize, t.minYSize))
 
-    # Burn in one by one
-    for t in targets:
-        print("Burning platform: %s" % t.name)
-        startTime = datetime.utcnow()
 
-        event = t.burn((8*t.minXSize, 4*t.minYSize))
-        event.wait()
+#    # Burn in one by one
+#    for t in targets:
+#        print("Burning platform: %s" % t.name)
+#        startTime = datetime.utcnow()
+#
+#        event = t.burn((8*t.minXSize, 2*t.minYSize))
+#        event.wait()
+#
+#        endTime = datetime.utcnow()
+#        elapsed = endTime - startTime
+#        print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
+#        time.sleep(20)
+#
+#    # All together
+#    events =[]
+#
+#    print("Burning platforms all together, at the same time")
+#    startTime = datetime.utcnow()
+#    for i in range(8):
+#        for t in targets:
+#            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
+#
+#    for e in events:
+#        e.wait()
+#
+#    endTime = datetime.utcnow()
+#    elapsed = endTime - startTime
+#    print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
+#    time.sleep(30)
 
-        endTime = datetime.utcnow()
-        elapsed = endTime - startTime
-        print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
-        time.sleep(20)
-
-    # All together
-    events ={}
-
-    print("Burning platform all together")
+    time.sleep(30)
+    print("Burning platforms with sequence")
+    events =[]
     startTime = datetime.utcnow()
-    for t in targets:
-        events[t.name] = t.burn((8*t.minXSize, 4*t.minYSize))
+    for i in range(8):
+        for t in sorted(targets, key=lambda x:x.name):
+            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
+            time.sleep(2)
 
-    for t in targets:
-        events[t.name].wait()
+    for e in events:
+        e.wait()
 
     endTime = datetime.utcnow()
     elapsed = endTime - startTime
     print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
-    time.sleep(30)
 
+    time.sleep(30)
+    print("Burning platforms with reverse sequence")
+    events =[]
+    startTime = datetime.utcnow()
+    for i in range(8):
+        for t in sorted(targets, key=lambda x:x.name, reverse=True):
+            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
+            time.sleep(2)
+
+    for e in events:
+        e.wait()
+
+    endTime = datetime.utcnow()
+    elapsed = endTime - startTime
+    print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
+    print("Burn in test done", flush=True)
+    time.sleep(2)
