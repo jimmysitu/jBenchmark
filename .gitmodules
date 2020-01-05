@@ -13,3 +13,6 @@
 [submodule "coreboot"]
 	path = coreboot
 	url = https://github.com/coreboot/coreboot.git
+[submodule "likwid"]
+	path = likwid
+	url = https://github.com/jimmysitu/likwid.git
