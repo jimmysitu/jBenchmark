@@ -90,6 +90,7 @@ if __name__ == "__main__":
 
 
     # Burn in one by one
+    time.sleep(20)
     for t in targets:
         print("Burning platform: %s" % t.name)
         startTime = datetime.utcnow()
