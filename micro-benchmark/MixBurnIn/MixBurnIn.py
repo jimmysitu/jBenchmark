@@ -74,7 +74,7 @@ if __name__ == "__main__":
                 xsize = xsize + 8
 
             # Get some power credit
-            time.sleep(10)
+            time.sleep(5)
             startTime = datetime.utcnow()
 
             event = t.burn((xsize, ysize))
@@ -89,25 +89,25 @@ if __name__ == "__main__":
         print("Final min size: %d, %d" % (t.minXSize, t.minYSize))
 
 
-    # Burn in one by one
-    time.sleep(20)
-    for t in targets:
-        print("Burning platform: %s" % t.name)
-        startTime = datetime.utcnow()
-
-        events =[]
-        # Make sure this is longer than Tu of PL2
-        for i in range(16):
-            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
-
-        for e in events:
-            e.wait()
-
-        endTime = datetime.utcnow()
-        elapsed = endTime - startTime
-        print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
-        time.sleep(20)
+#    # Burn in one by one
+#    time.sleep(20)
+#    for t in targets:
+#        print("Burning platform: %s" % t.name)
+#        startTime = datetime.utcnow()
 #
+#        events =[]
+#        # Make sure this is longer than Tu of PL2
+#        for i in range(16):
+#            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
+#
+#        for e in events:
+#            e.wait()
+#
+#        endTime = datetime.utcnow()
+#        elapsed = endTime - startTime
+#        print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
+#        time.sleep(20)
+
 #    # All together
 #    events =[]
 #    print("Burning platforms all together, at the same time")
@@ -123,15 +123,53 @@ if __name__ == "__main__":
 #    elapsed = endTime - startTime
 #    print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
 #    time.sleep(30)
-#
+
+    time.sleep(30)
+    print("Burning platforms with sequence")
+    events =[]
+    startTime = datetime.utcnow()
+    for i in range(8):
+        for t in sorted(targets, key=lambda x:x.name):
+            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
+            time.sleep(2)
+
+    for e in events:
+        e.wait()
+
+    endTime = datetime.utcnow()
+    elapsed = endTime - startTime
+    print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
+
+    time.sleep(30)
+    print("Burning platforms with reverse sequence")
+    events =[]
+    startTime = datetime.utcnow()
+    for i in range(8):
+        for t in sorted(targets, key=lambda x:x.name, reverse=True):
+            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
+            time.sleep(2)
+
+    for e in events:
+        e.wait()
+
+    endTime = datetime.utcnow()
+    elapsed = endTime - startTime
+    print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
+
 #    time.sleep(30)
-#    print("Burning platforms with sequence")
+#    print("Burning platforms with sequence, skip PL2")
 #    events =[]
 #    startTime = datetime.utcnow()
+#
+#    lstTargets = sorted(targets, key=lambda x:x.name)
+#    for i in range(12):
+#        events.append(lstTargets[0].burn((8*t.minXSize, 2*t.minYSize)))
+#        time.sleep(1)
+#
+#    time.sleep(20)
 #    for i in range(8):
-#        for t in sorted(targets, key=lambda x:x.name):
+#        for t in lstTargets:
 #            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
-#            time.sleep(2)
 #
 #    for e in events:
 #        e.wait()
@@ -141,13 +179,19 @@ if __name__ == "__main__":
 #    print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
 #
 #    time.sleep(30)
-#    print("Burning platforms with reverse sequence")
+#    print("Burning platforms with sequence, reverse, skip PL2")
 #    events =[]
 #    startTime = datetime.utcnow()
+#
+#    lstTargets = sorted(targets, key=lambda x:x.name, reverse=True)
+#    for i in range(12):
+#        events.append(lstTargets[0].burn((8*t.minXSize, 2*t.minYSize)))
+#        time.sleep(1)
+#
+#    time.sleep(20)
 #    for i in range(8):
-#        for t in sorted(targets, key=lambda x:x.name, reverse=True):
+#        for t in lstTargets:
 #            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
-#            time.sleep(2)
 #
 #    for e in events:
 #        e.wait()
@@ -155,5 +199,6 @@ if __name__ == "__main__":
 #    endTime = datetime.utcnow()
 #    elapsed = endTime - startTime
 #    print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
+
     print("Burn in test done", flush=True)
     time.sleep(2)
