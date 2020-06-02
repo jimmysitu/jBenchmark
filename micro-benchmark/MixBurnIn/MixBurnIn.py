@@ -121,36 +121,6 @@ if __name__ == "__main__":
     elapsed = endTime - startTime
     print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
 
-    time.sleep(30)
-    print("Burning platforms with sequence")
-    events =[]
-    startTime = datetime.utcnow()
-    for i in range(8):
-        for t in sorted(targets, key=lambda x:x.name):
-            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
-            time.sleep(2)
-
-    for e in events:
-        e.wait()
-
-    endTime = datetime.utcnow()
-    elapsed = endTime - startTime
-    print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
-
-    time.sleep(30)
-    print("Burning platforms with reverse sequence")
-    events =[]
-    startTime = datetime.utcnow()
-    for i in range(8):
-        for t in sorted(targets, key=lambda x:x.name, reverse=True):
-            events.append(t.burn((8*t.minXSize, 2*t.minYSize)))
-            time.sleep(2)
-
-    for e in events:
-        e.wait()
-
-    endTime = datetime.utcnow()
-    elapsed = endTime - startTime
-    print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
     print("Burn in test done", flush=True)
     time.sleep(2)
+

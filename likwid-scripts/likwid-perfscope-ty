@@ -654,6 +654,10 @@ while true do
         for f, flist in pairs(group_list[group]["formulas"]) do
             if flist["index"] ~= nil then
                 for i=1,nr_threads do
+                    if data[flist["index"]][i] == nil then
+                        str = ""
+                        break
+                    end
                     str = str .." ".. data[flist["index"]][i]
                 end
             end
