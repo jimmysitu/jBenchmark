@@ -25,6 +25,10 @@ Some useful tools
     perf stat -e power/energy-pkg/,power/energy-cores/,cycle -I 1000 sleep 1000
     ```
 
+* cpuid
+  * Dump detailed information about the CPU(s) gathered from the CPUID instruction,
+    and also determine the exact model of CPU(s).
+
 ### Prerequisites
 
 ```bash
