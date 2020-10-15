@@ -29,6 +29,14 @@ Some useful tools
   * Dump detailed information about the CPU(s) gathered from the CPUID instruction,
     and also determine the exact model of CPU(s).
 
+Some useful commands
+
+* Check CPU idle informations
+
+  * ```bash
+    ls /sys/devices/system/cpu/cpu*/cpuidle/
+    ```
+
 ### Prerequisites
 
 ```bash
