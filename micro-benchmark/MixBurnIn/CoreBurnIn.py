@@ -8,7 +8,7 @@ import numpy as np
 
 import time
 
-MIN_ELAPSED = 1
+MIN_ELAPSED = 0.5
 KEY_LENGTH = 64
 BUF_MAX_SIZE= 1024 * 1024
 
@@ -107,3 +107,4 @@ if __name__ == "__main__":
     print("Kernel Elapsed Time: %s" % elapsed.total_seconds())
     print("Burn in test done", flush=True)
     time.sleep(2)
+

@@ -199,6 +199,15 @@ local predefined_plots = {
         y2title = nil,
         xtitle = "Time"
     },
+    PERF = {
+        perfgroup = "PERF",
+        ymetricmatch = "Aperf/Mperf [%]",
+        ytitle = "Aperf/Mperf [%]",
+        y2metricmatch = "Pperf/Aperf [%]",
+        y2title = "Pperf/Aperf [%]",
+        title = "Aperf/Mperf & Pperf/Aperf",
+        xtitle = "Time"
+    },
     NUMA = {
         perfgroup = "NUMA",
         ymetricmatch = "Local DRAM bandwidth [MByte/s]",

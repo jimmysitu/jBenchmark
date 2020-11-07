@@ -41,20 +41,20 @@ sudo apt install libpapi-dev
 
 ### Useful MSRs
 
-| Register Address | Register Name         | Bit Description                    |
-| ---------------- | --------------------- | ---------------------------------- |
-|                  |                       |                                    |
-|                  |                       |                                    |
-| 610H             | MSR_PKG_POWER_LIMIT   | PKG RAPL Power Limit Control (R/W) |
-| 614H             | MSR_PKG_POWER_INFO    | PKG RAPL Parameters (R/W)          |
-| 638H             | MSR_PP0_POWER_LIMIT   | PP0 RAPL Power Limit Control (R/W) |
-| 639H             | MSR_PP0_ENERGY_STATUS | PP0 Energy Status (R/O)            |
-| 63AH             | MSR_PP0_POLICY        | PP0 Balance Policy (R/W)           |
-| 640H             | MSR_PP1_POWER_LIMIT   | PP1 RAPL Power Limit Control (R/W) |
-| 641H             | MSR_PP1_ENERGY_STATUS | PP1 Energy Status (R/O)            |
-| 642H             | MSR_PP1_POLICY        | PP1 Balance Policy (R/W)           |
-|                  |                       |                                    |
-|                  |                       |                                    |
+| Register Address | Register Name               | Bit Description                                              |
+| ---------------- | --------------------------- | ------------------------------------------------------------ |
+|                  |                             |                                                              |
+|                  |                             |                                                              |
+| 610H             | MSR_PKG_POWER_LIMIT         | PKG RAPL Power Limit Control (R/W)                           |
+| 614H             | MSR_PKG_POWER_INFO          | PKG RAPL Parameters (R/W)                                    |
+| 638H             | MSR_PP0_POWER_LIMIT         | PP0 RAPL Power Limit Control (R/W)                           |
+| 639H             | MSR_PP0_ENERGY_STATUS       | PP0 Energy Status (R/O)                                      |
+| 63AH             | MSR_PP0_POLICY              | PP0 Balance Policy (R/W)                                     |
+| 640H             | MSR_PP1_POWER_LIMIT         | PP1 RAPL Power Limit Control (R/W)                           |
+| 641H             | MSR_PP1_ENERGY_STATUS       | PP1 Energy Status (R/O)                                      |
+| 642H             | MSR_PP1_POLICY              | PP1 Balance Policy (R/W)                                     |
+| 64DH             | MSR_PLATFORM_ENERGY_COUNTER | Total energy consumed by all devices in the platform that receive power from integrated power delivery mechanism, included platform devices are processor cores, SOC, memory, add-on or peripheral devices that get powered directly from the platform power delivery means. Only in Skylake and later |
+|                  |                             |                                                              |
 
 
 

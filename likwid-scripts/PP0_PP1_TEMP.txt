@@ -1,4 +1,4 @@
-SHORT Power and Energy consumption
+SHORT Temperature
 
 EVENTSET
 FIXC0 INSTR_RETIRED_ANY
@@ -23,5 +23,5 @@ PP0 Temperature = PP0_TEMP
 PP1 Temperature = PP1_TEMP
 -
 Skylake implements the MCHBAR PCI interface. This interface enables to
-monitor the read/write bandwidth.
+monitor the PP0, PP1 temperature.
 

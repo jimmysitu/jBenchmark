@@ -15,11 +15,11 @@ Runtime unhalted [s] FIXC1*inverseClock
 Clock [MHz]  1.E-06*(FIXC1/FIXC2)/inverseClock
 CPI  FIXC1/FIXC0
 Power PP0 [W] PWR1/time
-Core Voltage [V] VTG0/8192.0
+Core Voltage [V] VTG0
 
 LONG
 Formula:
 Power PP0 = PWR_PP0_ENERGY / time
-Voltage Core = VOLTAGE_CORE / 8192.0
+Voltage Core = VOLTAGE_CORE
 -
 Skylake implements the voltage interface.
