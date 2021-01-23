@@ -55,7 +55,7 @@ local predefined_plots = {
         ytitle = "Clock [MHz]",
         xmetricmatch = "Core Voltage [V]",
         xtitle = "Core Voltage [V]",
-        title = "PP0  Clock Frequency and Voltage ",
+        title = "PP0 Clock Frequency and Voltage ",
     },
 }
 
@@ -339,9 +339,9 @@ print_stdout("Run command on host or localhost\n"..cmd)
 
 for i, group in pairs(group_list) do
     if line then
-        gnucmd = string.format("%s --stream %f --with linespoints --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
+        gnucmd = string.format("%s --stream %f --with linespoints --domain --dataid", FEEDGNUPLOT, mfreq/#group_list)
     else
-        gnucmd = string.format("%s --stream %f --with points --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
+        gnucmd = string.format("%s --stream %f --with points --domain --dataid", FEEDGNUPLOT, mfreq/#group_list)
     end
     extracmds = {'set xtics font \",10\"', 'set ytics font \",10\"',
                  'set bmargin 5', 'set key font \",12\"' }
@@ -396,6 +396,9 @@ for i, group in pairs(group_list) do
         gnucmd = gnucmd .. " 1>/dev/null 2>&1"
     end
     group_list[i]["output"] = assert(io.popen(gnucmd,"w"))
+    if dump then
+        print_stdout(gnucmd)
+    end
 end
 
 
@@ -403,13 +406,13 @@ likwid.catchSignal()
 local mtime = {}
 for i,g in pairs(group_list) do
     local str = ""
-    for k,t in pairs(cpulist) do
-        for j,c in pairs(g["formulas"]) do
-            str = str .."0 "
+    --for j,c in pairs(g["formulas"]) do
+        for k,t in pairs(cpulist) do
+            str = str .. " 0 " .. string.format("%d 0\n", k-1)
         end
-    end
+    --end
     mtime[i] = nil
-    g["output"]:write(str.."\n")
+    g["output"]:write(str)
     g["output"]:flush()
     if dump then
         print_stdout(tostring(i).." ".. str)
@@ -451,16 +454,18 @@ while true do
 
         str = ""
         --str = tostring(time)
-        for f, flist in pairs(group_list[group]["formulas"]) do
-            if flist["index"] ~= nil then
-                for i=1,nr_threads do
+        for i=1,nr_threads do
+            for f, flist in pairs(group_list[group]["formulas"]) do
+                if flist["index"] ~= nil then
                     str = str .." ".. data[flist["index"]][i]
+                    str = str .. string.format(" %d", i-1)
                 end
                 cnt = cnt + 1
             end
+            str = str .. "\n"
         end
 
-        group_list[group]["output"]:write(str.."\n")
+        group_list[group]["output"]:write(str)
 
 --        if count > 0 then
 --            if cnt > count then

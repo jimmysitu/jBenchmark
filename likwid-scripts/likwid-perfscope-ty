@@ -196,6 +196,7 @@ local predefined_plots = {
         ymetricmatch = "Clock [MHz]",
         ytitle = "Clock [MHz]",
         title = "Clock Frequency",
+        y2title = nil,
         xtitle = "Time"
     },
     TEMP = {
@@ -553,9 +554,8 @@ cmd = cmd .. " ".. table.concat(execList, " ")
 cmd = cmd .. " 3>&1 1>&2 2>&3 3>&-"
 if host ~= nil then
     cmd = cmd .. " \\\" \" "
-    print_stdout("Run command on host\n"..cmd)
 end
-
+print_stdout("Run command on host or localhost\n"..cmd)
 
 for i, group in pairs(group_list) do
     gnucmd = string.format("%s --stream %f --with linespoints --domain --nodataid", FEEDGNUPLOT, mfreq/#group_list)
@@ -588,7 +588,9 @@ for i, group in pairs(group_list) do
         table.insert(extracmds, string.format("set ylabel %q font \",12\"", group["ytitle"]))
     end
     if group["y2title"] ~= nil then
-        gnucmd = gnucmd .. string.format(" --y2 %d", group["y2funcindex"])
+        for c,cpu in pairs(cpulist) do
+            gnucmd = gnucmd .. string.format(" --y2 %d", (c-1) + (#cpulist * group["y2funcindex"]))
+        end
         table.insert(extracmds, string.format("set y2label %q font \",12\"", group["y2title"]))
     end
     if group["formulas"] then
@@ -598,8 +600,8 @@ for i, group in pairs(group_list) do
             end
         else
             local curveID = 0
-            for c,cpu in pairs(cpulist) do
-                for f, fdesc in pairs(group["formulas"]) do
+            for f, fdesc in pairs(group["formulas"]) do
+                for c,cpu in pairs(cpulist) do
                     gnucmd = gnucmd .. string.format(" --legend %d %q", curveID, "C"..cpu..": "..fdesc["name"])
                     curveID = curveID + 1
                 end
@@ -642,6 +644,9 @@ local oldtime = 0
 local clock = likwid.getCpuClock()
 while true do
     local l = perfctr:read("*line")
+    if dump then
+        print_stdout(l)
+    end
     if l == nil then
         break
     end
@@ -667,11 +672,12 @@ while true do
         end
 
         str = tostring(time)
+        skip = 0
         for f, flist in pairs(group_list[group]["formulas"]) do
             if flist["index"] ~= nil then
                 for i=1,nr_threads do
                     if data[flist["index"]][i] == nil then
-                        str = ""
+                        skip = 1
                         break
                     end
                     str = str .." ".. data[flist["index"]][i]
@@ -679,12 +685,14 @@ while true do
             end
         end
 
-        group_list[group]["output"]:write(str.."\n")
-        group_list[group]["output"]:flush()
-        if dump then
-            print_stdout(tostring(group).." ".. str)
+        if skip == 0 then
+            group_list[group]["output"]:write(str.."\n")
+            group_list[group]["output"]:flush()
+            if dump then
+                print_stdout(tostring(group).." ".. str)
+            end
+            oldtime = time
         end
-        oldtime = time
     end
 end
 
