@@ -442,8 +442,8 @@ for i, event_def in pairs(eventStrings) do
             if mconfig["description"]:match(mmatch) then
                 formulalist = {{name=mconfig["description"], index=i}}
             end
-        end
-        for i,mconfig in pairs(groupdata["Metrics"]) do
+        --end
+        --for i,mconfig in pairs(groupdata["Metrics"]) do
             if plotgroupconfig["y2metricmatch"] ~= nil then
                 local mmatch = "%a*"..plotgroupconfig["y2metricmatch"]:gsub("%[","%%["):gsub("%]","%%]").."%a*"
                 if mconfig["description"]:match(mmatch) then
@@ -644,9 +644,6 @@ local oldtime = 0
 local clock = likwid.getCpuClock()
 while true do
     local l = perfctr:read("*line")
-    if dump then
-        print_stdout(l)
-    end
     if l == nil then
         break
     end
