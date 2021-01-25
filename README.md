@@ -9,6 +9,7 @@ Some useful tools
 - x86_energy_perf_policy
 
   - Help to enable and setting hwp and turbo
+  - Need sudo
 
 - CoreFreq
 
@@ -100,9 +101,11 @@ sudo apt install libpapi-dev
   ```
   
 
+### Known Issue
 
+* Sometime drawing may lag when HT is enabled
 
-
+  
 
 ## Micro-Benchmark
 

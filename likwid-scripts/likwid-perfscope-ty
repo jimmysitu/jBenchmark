@@ -191,12 +191,13 @@ local predefined_plots = {
         title = "Power and Clock Frequency",
         xtitle = "Time"
     },
-    CORE_CLK = {
-        perfgroup = "L2",
-        ymetricmatch = "Clock [MHz]",
-        ytitle = "Clock [MHz]",
+    PERFSTAT = {
+        perfgroup = "PERFSTAT",
+        ytitle = "Core Freq [MHz]",
+        ymetricmatch = "Core Freq [MHz]",
+        y2title = "Ring Freq [MHz]",
+        y2metricmatch = "Ring Freq [MHz]",
         title = "Clock Frequency",
-        y2title = nil,
         xtitle = "Time"
     },
     TEMP = {
@@ -617,7 +618,7 @@ for i, group in pairs(group_list) do
     end
     group_list[i]["output"] = assert(io.popen(gnucmd,"w"))
     if dump then
-        print_stdout("Running cmd to feedGnuplt:\n\t"..gnucmd)
+        print_stdout("Running cmd to feedGnuplot:\n\t"..gnucmd)
     end
 end
 
