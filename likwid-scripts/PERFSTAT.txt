@@ -1,0 +1,24 @@
+SHORT Perf status
+EVENTSET
+FIXC0 INSTR_RETIRED_ANY
+FIXC1 CPU_CLK_UNHALTED_CORE
+FIXC2 CPU_CLK_UNHALTED_REF
+CCPS0 CORE_PERF_STAT
+MBOX0SAP0 RING_PERF_STAT
+
+METRICS
+Runtime (RDTSC) [s] time
+Runtime unhalted [s] FIXC1*inverseClock
+Clock [MHz]  1.E-06*(FIXC1/FIXC2)/inverseClock
+CPI  FIXC1/FIXC0
+Core Freq [MHz] CCPS0*100
+Ring Freq [MHz] MBOX0SAP0*100
+
+LONG
+Formula:
+Core Freq = CCPS0*100
+Ring Freq = MBOX0SAP0*100
+-
+Skylake implements the performance status interface. This interface enables to
+monitor the core and uncore performance status
+
