@@ -200,6 +200,13 @@ local predefined_plots = {
         title = "Clock Frequency",
         xtitle = "Time"
     },
+    CORE_CLK = {
+        perfgroup = "PERFSTAT",
+        ytitle = "Core Freq [MHz]",
+        ymetricmatch = "Core Freq [MHz]",
+        title = "Clock Frequency",
+        xtitle = "Time"
+    },
     TEMP = {
         perfgroup = "ENERGY",
         ymetricmatch = "Temperature [C]",
