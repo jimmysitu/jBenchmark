@@ -2,9 +2,7 @@
 
 # jmBenchmark
 
-Jimmy's Benchmark
-
-Some useful tools
+## Some useful tools
 
 - x86_energy_perf_policy
 
@@ -38,15 +36,16 @@ Some useful commands
     ls /sys/devices/system/cpu/cpu*/cpuidle/
     ```
 
-### Prerequisites
+* Check ACPI table informations
 
-```bash
-sudo apt install libpapi-dev
-```
+  * ```bash
+    cat /sys/firmware/acpi/table/DSDT > dsdt
+    iasl -d dsdt
+    ```
 
-- For OpenCL benchmarks OpenDwarfs, need Intel OpenCL runtime for GPU/CPU
+  * Check dsdt.dsl
 
-  
+
 
 ### Useful MSRs
 
@@ -62,6 +61,11 @@ sudo apt install libpapi-dev
 | 640H             | MSR_PP1_POWER_LIMIT         | PP1 RAPL Power Limit Control (R/W)                           |
 | 641H             | MSR_PP1_ENERGY_STATUS       | PP1 Energy Status (R/O)                                      |
 | 642H             | MSR_PP1_POLICY              | PP1 Balance Policy (R/W)                                     |
+| 648H             | MSR_CONFIG_TDP_NOMINAL      | TDP base                                                     |
+| 649H             | MSR_CONFIG_TDP_LEVEL1       | TDP down level                                               |
+| 64AH             | MSR_CONFIG_TDP_LEVEL2       | TDP up level                                                 |
+| 64BH             | MSR_CONFIG_TDP_CONTROL      | Select Base, up or down TDP                                  |
+| 64CH             | MSR_TURBO_ACTIVATION_RATIO  | Setting max none turbo ratio (RW/L)                          |
 | 64DH             | MSR_PLATFORM_ENERGY_COUNTER | Total energy consumed by all devices in the platform that receive power from integrated power delivery mechanism, included platform devices are processor cores, SOC, memory, add-on or peripheral devices that get powered directly from the platform power delivery means. Only in Skylake and later |
 |                  |                             |                                                              |
 
@@ -86,7 +90,13 @@ sudo apt install libpapi-dev
 
   
 
+## Prerequisites
 
+```bash
+sudo apt install libpapi-dev
+```
+
+- For OpenCL benchmarks OpenDwarfs, need Intel OpenCL runtime for GPU/CPU
 
 ## likwid-scripts
 
